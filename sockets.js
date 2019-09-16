@@ -720,7 +720,17 @@ exports.ListenSocket = function (server, config) {
             });
         }
         var conDetails = [client.id, client.handshake.issued + '']
-        client.emit('turnservers', credentials);
+
+        var turnCreds = [];
+
+        turnCreds.push({
+            username: "user",
+            credential: "root",
+            urls: "turn:54.242.90.111:3478"
+        });
+
+        client.emit('turnservers', turnCreds);
+
         client.emit('loggedin', conDetails)
         console.log('Client Id: ' + client.id + ' Connected to signaling');
 
