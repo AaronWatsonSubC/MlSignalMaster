@@ -21,7 +21,7 @@
   ],
   "turnservers": [
     {
-      "urls": ["turn:54.242.90.111"],
+      "urls": ["turn:54.242.90.111:3478"],
       "username": "user",
       "credential": "root"
     }
