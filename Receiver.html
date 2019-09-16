@@ -1,11 +1,13 @@
 ﻿<!DOCTYPE html>
 <html lang="en-IE">
+
 <head>
     <meta charset="utf-8" />
     <title>Receiver test page</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/style.css" />
 </head>
+
 <body>
     <h1>Receiver test page</h1>
     <figure>
@@ -19,7 +21,8 @@
                     <td class="textcolumn"><input type="text" id="sigserverurl" value="" readonly /></td>
                     <td class="namecolumn2">Room name:</td>
                     <td><input type="text" id="roomname" readonly /></td>
-                    <td class="buttoncolumn"><button id="connecttosigserv" type="button" data-state="disabled">Connect</button></td>
+                    <td class="buttoncolumn"><button id="connecttosigserv" type="button"
+                            data-state="disabled">Connect</button></td>
                 </tr>
                 <tr>
                     <td>Streaming from:</td>
@@ -34,7 +37,8 @@
                 <tr>
                     <td>Send message:</td>
                     <td colspan="3"><input type="text" id="message" value="A message to send" /></td>
-                    <td><button id="sendmessage" type="button" data-state="message" title="Send message to peer">Send</button></td>
+                    <td><button id="sendmessage" type="button" data-state="message"
+                            title="Send message to peer">Send</button></td>
                 </tr>
             </table>
         </div>
@@ -56,14 +60,14 @@
         var webrtc = new SimpleWebRTC({
             target: targetId,
             url: signalingServer,
-            iceServers: [{urls: 'stun:stun.l.google.com:19302'}],
+            iceServers: [{ url: "stun:stun.l.google.com:19302" }, { username: "user", credential: "root", urls: ["turn:54.242.90.111:3478"] }],
             localVideoEl: '',
             remoteVideosEl: '',
             autoRequestMedia: false,
             debug: false,
             detectSpeakingEvents: true,
-            autoAdjustMic: false,
-});
+            autoAdjustMic: false
+        });
 
         // when it's ready, join if we got a room from the URL
         webrtc.on('readyToCall', function () {
@@ -72,7 +76,7 @@
             $('#sigserverurl').attr('value', signalingServer);
 
             webrtc.setInfo('', webrtc.connection.connection.id, ''); // Store strongId
-             
+
             if (room) {
                 webrtc.joinRoom(room);
             }
@@ -85,12 +89,12 @@
 
             $('#connecttopeer').attr('data-state', 'enabled');
             $('#targetpeer').attr('value', targetId);
-			
-			video.setAttribute('loop', '');
-			video.setAttribute('autoplay', 'true');
-			video.setAttribute('controls', '');
-			video.setAttribute('width', '100%');
-			video.setAttribute('height', '100%');
+
+            video.setAttribute('loop', '');
+            video.setAttribute('autoplay', 'true');
+            video.setAttribute('controls', '');
+            video.setAttribute('width', '100%');
+            video.setAttribute('height', '100%');
 
             videoEl = video;
             while (container.hasChildNodes())
@@ -139,4 +143,5 @@
         });
     </script>
 </body>
+
 </html>

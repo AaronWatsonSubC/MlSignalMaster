@@ -1,11 +1,13 @@
 ﻿<!DOCTYPE html>
 <html lang="en-IE">
+
 <head>
     <meta charset="utf-8" />
     <title>Janus receiver test page</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/style.css" />
 </head>
+
 <body>
     <h1>Receiver test page</h1>
     <figure>
@@ -19,7 +21,8 @@
                     <td class="textcolumn"><input type="text" id="sigserverurl" value="" readonly /></td>
                     <td class="namecolumn2">Room name:</td>
                     <td><input type="text" id="roomname" readonly /></td>
-                    <td class="buttoncolumn"><button id="connecttosigserv" type="button" data-state="disabled">Connect</button></td>
+                    <td class="buttoncolumn"><button id="connecttosigserv" type="button"
+                            data-state="disabled">Connect</button></td>
                 </tr>
                 <tr>
                     <td>Streaming from:</td>
@@ -47,7 +50,7 @@
         var webrtc = new SimpleWebRTC({
             target: targetId,
             url: signalingServer,
-            iceServers: [{urls: 'stun:stun.l.google.com:19302'}],
+            iceServers: [{ url: "stun:stun.l.google.com:19302" }, { username: "user", credential: "root", urls: ["turn:54.242.90.111:3478"] }],
             localVideoEl: '',
             remoteVideosEl: '',
             autoRequestMedia: false,
@@ -65,7 +68,7 @@
 
             webrtc.setInfo(nickName, webrtc.connection.connection.id, 'receiver', 'janus'); // Store strongId
 
-            if (room) 
+            if (room)
                 webrtc.joinRoom(room);
         });
 
@@ -76,12 +79,12 @@
 
             $('#connecttopeer').attr('data-state', 'enabled');
             $('#targetpeer').attr('value', targetId);
-			
-			video.setAttribute('loop', '');
-			video.setAttribute('autoplay', 'true');
-			video.setAttribute('controls', '');
-			video.setAttribute('width', '100%');
-			video.setAttribute('height', '100%');
+
+            video.setAttribute('loop', '');
+            video.setAttribute('autoplay', 'true');
+            video.setAttribute('controls', '');
+            video.setAttribute('width', '100%');
+            video.setAttribute('height', '100%');
 
             videoEl = video;
             while (container.hasChildNodes())
@@ -111,4 +114,5 @@
         });
     </script>
 </body>
+
 </html>

@@ -1,11 +1,13 @@
 ﻿<!DOCTYPE html>
 <html lang="en-IE">
+
 <head>
     <meta charset="utf-8" />
     <title>WebRTC preview test page</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="css/style.css" />
 </head>
+
 <body>
     <h1>WebRTC preview test page</h1>
     <figure data-fullscreen="false">
@@ -20,12 +22,13 @@
                     <td class="textcolumn"><input type="text" id="sigserverurl" value="" readonly /></td>
                     <td class="namecolumn2">Room name:</td>
                     <td><input type="text" id="roomname" readonly /></td>
-                    <td class="buttoncolumn"><button id="connecttosigserv" type="button" data-state="disabled">Connect</button></td>
+                    <td class="buttoncolumn"><button id="connecttosigserv" type="button"
+                            data-state="disabled">Connect</button></td>
                 </tr>
                 <tr>
                     <td>Streaming from:</td>
                     <td colspan="3"><input type="text" id="targetpeer" readonly /></td>
-                    <td><button id="connecttopeer" type="button" data-state="disabled" >Connect</button></td>
+                    <td><button id="connecttopeer" type="button" data-state="disabled">Connect</button></td>
                 </tr>
                 <tr>
                     <td>Received messages:</td>
@@ -35,7 +38,8 @@
                 <tr>
                     <td>Send message:</td>
                     <td colspan="3"><input type="text" id="message" value="A message to send" /></td>
-                    <td><button id="sendmessage" type="button" data-state="message" title="Send message to peer">Send</button></td>
+                    <td><button id="sendmessage" type="button" data-state="message"
+                            title="Send message to peer">Send</button></td>
                 </tr>
             </table>
         </div>
@@ -51,27 +55,24 @@
         var signalingServer;
         var room = queryDict['room'];
         var targetId = queryDict['id'];
-		var vidEnc = queryDict['vidEnc'];
-		var audEnc = queryDict['audEnc'];
-		var path = location.href;
-        
-		if (path)
-		{
-		    //Parse path (it should look like (http(s)://signaling_server:port/room/targetpeerid_or_name  ))
-		    var splitted = path.split('/');
-		    if (splitted.length > 0 && splitted.length >= 4) {
-		        signalingServer = splitted[0] + '//' + splitted[2];
-		        room = splitted[3];
-		        targetId = splitted[4];
-		    }
-		}
+        var vidEnc = queryDict['vidEnc'];
+        var audEnc = queryDict['audEnc'];
+        var path = location.href;
+
+        if (path) {
+            //Parse path (it should look like (http(s)://signaling_server:port/room/targetpeerid_or_name  ))
+            var splitted = path.split('/');
+            if (splitted.length > 0 && splitted.length >= 4) {
+                signalingServer = splitted[0] + '//' + splitted[2];
+                room = splitted[3];
+                targetId = splitted[4];
+            }
+        }
         // create webrtc connection
         var webrtc = new SimpleWebRTC({
-		    target: targetId,
-            videoEncoder: vidEnc,
-            audioEncoder: audEnc,
+            target: targetId,
             url: signalingServer,
-			stunServer: 'stun:stun.l.google.com:19302',
+            iceServers: [{ url: "stun:stun.l.google.com:19302" }, { username: "user", credential: "root", urls: ["turn:54.242.90.111:3478"] }],
             localVideoEl: '',
             remoteVideosEl: '',
             autoRequestMedia: false,
@@ -84,10 +85,10 @@
         webrtc.on('readyToCall', function () {
             $('#connecttosigserv').attr('data-state', 'enabled');
             $('#roomname').attr('value', room);
-			$('#sigserverurl').attr('value', signalingServer);
-			
-			webrtc.setInfo('',webrtc.connection.connection.id, ''); // Store strongId
-			
+            $('#sigserverurl').attr('value', signalingServer);
+
+            webrtc.setInfo('', webrtc.connection.connection.id, ''); // Store strongId
+
             if (room) {
                 webrtc.joinRoom(room);
             }
@@ -105,16 +106,16 @@
                 videoEl = video;
                 while (container.hasChildNodes())
                     container.removeChild(container.lastChild);
-					
-				video.setAttribute('loop', '');
-				video.setAttribute('autoplay', 'true');
-				video.setAttribute('controls', '');
-				video.setAttribute('width', '100%');
-				video.setAttribute('height', '100%');
+
+                video.setAttribute('loop', '');
+                video.setAttribute('autoplay', 'true');
+                video.setAttribute('controls', '');
+                video.setAttribute('width', '100%');
+                video.setAttribute('height', '100%');
 
                 container.appendChild(video);
                 webrtc.stopLocalVideo();
-				video.play();
+                video.play();
             }
         });
 
@@ -122,7 +123,7 @@
         webrtc.on('videoRemoved', function (video, peer) {
             console.log('video removed ', peer);
             var container = document.getElementById('videoContainer');
-            if (peer.id == targetId|| peer.strongId == targetId || peer.nickName == targetId) {
+            if (peer.id == targetId || peer.strongId == targetId || peer.nickName == targetId) {
 
                 $('#connecttopeer').attr('data-state', 'disabled');
                 $('#targetpeer').attr('value', '');
@@ -156,4 +157,5 @@
         });
     </script>
 </body>
+
 </html>
